@@ -1,6 +1,6 @@
 ## Mangobocado: Small model wrapper for motor
 
-Mango is a small wrapper for the [motor]('https://github.com/mongodb/motor') to be used on top of [tornado]('https://github.com/tornadoweb/tornado').
+Mango is a small wrapper for the [motor](https://github.com/mongodb/motor) to be used on top of [tornado](https://github.com/tornadoweb/tornado).
 
 The idea is trying to imitate the Ruby On Rails' ActiveRecord api for handling common operations
 
