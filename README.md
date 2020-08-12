@@ -1,10 +1,10 @@
-## Mangobocado: Small model wrapper for motor
+# Mangobocado: Small model wrapper for motor
 
 Mango is a small wrapper for the [motor](https://github.com/mongodb/motor) to be used on top of [tornado](https://github.com/tornadoweb/tornado).
 
 The idea is trying to imitate the Ruby On Rails' ActiveRecord api for handling common operations
 
-# Requirements
+## Requirements
 
 Expects a `config.yml` in the root with the `host` and `port` for mongodb
 
@@ -12,11 +12,11 @@ Expects a `config.yml` in the root with the `host` and `port` for mongodb
 
 To install requirements manually: `pip install -r requirements.txt`
 
-# Installation
+## Installation
 
 `python3 setup.py install`
 
-# Example
+## Example
 
 ```
 from mangobocado.base_model import BaseModel
