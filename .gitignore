@@ -3,4 +3,6 @@ config.yml
 *.swp
 __pycache__/*
 test.py
-
+build/*
+dist/*
+mangobocado.egg-info/*

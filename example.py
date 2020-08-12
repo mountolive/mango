@@ -1,4 +1,4 @@
-from base_model import BaseModel
+from mangobocado.base_model import BaseModel
 from tornado.ioloop import IOLoop
 
 class Example(BaseModel):

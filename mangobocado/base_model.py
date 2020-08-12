@@ -6,7 +6,7 @@ import yaml
 
 sys.path.insert(1, '../util/mongo_helper.py')
 
-from mongo_helper import ModelException, db_connected
+from mangobocado.mongo_helper import ModelException, db_connected
 
 Fields = List[Tuple[str, bool]]
 
