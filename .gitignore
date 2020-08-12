@@ -1,6 +1,6 @@
 config.yml
 *.swo
 *.swp
-*/__pycache__/*
+__pycache__/*
 test.py
 
