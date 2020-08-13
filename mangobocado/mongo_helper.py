@@ -13,9 +13,9 @@ def db_connected(Class):
             try:
                 db.command('ismaster')
             except ConnectionFailure:
-                raise ModelException('''There's no connection to the db
-                                     passed as argument. Please, check
-                                     configuration file: config.yml''')
+                raise ModelException('There\'s no connection to the db \
+                                     passed as argument. Please, check \
+                                     configuration file: config.yml')
             else:
                 setattr(Class, 'db', db)
             return Class
@@ -30,11 +30,11 @@ def _create_database(config_file_path: str, db_name: str):
         `port` and `db_name` parameters'''
     config = yaml.load(open(config_file_path, 'r'), Loader=yaml.BaseLoader)
     if not config['host']:
-        raise ModelException('''host must be present in config.yaml''')
+        raise ModelException('host must be present in config.yaml')
     if not config['port']:
-        raise ModelException('''port must be present in config.yaml''')
+        raise ModelException('port must be present in config.yaml')
     if not config['port'].isnumeric():
-        raise ModelException('''Port must be a numeric value''')
+        raise ModelException('Port must be a numeric value')
     return MotorClient(config['host'],
                        int(config['port']))[db_name]
 

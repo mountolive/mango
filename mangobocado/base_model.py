@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 import sys
 from tornado import gen
-from typing import List, Tuple, Dict
+from typing import AsyncGenerator, Awaitable, Dict, List, Tuple
 import yaml
 
 sys.path.insert(1, '../util/mongo_helper.py')
@@ -35,9 +35,9 @@ class BaseModel:
         keys the associated fields named in the class parameter
         `fields`'''
         if not self.collection or not self.fields:
-            raise ModelException('''You need define the `fields` parameter
-                                 and the name of the collection, as the
-                                 parameter `collection`''')
+            raise ModelException('You need define the `fields` parameter \
+                                 and the name of the collection, as the \
+                                 parameter `collection`')
         self._valid_fields()
         field_names = list(map(lambda x: x[0], self.fields))
         for k, v in kwargs.items():
@@ -47,7 +47,7 @@ class BaseModel:
             setattr(self, k, v)
         self._id = kwargs['_id'] if '_id' in kwargs else None
 
-    async def save(self):
+    async def save(self) -> bool:
         ''' Saves a given instance's document.
         If the instance as an existing
         associated `_id` it executes an update_one query for
@@ -63,7 +63,7 @@ class BaseModel:
         self._id = res._id
         return True
 
-    async def update(self, **params):
+    async def update(self, **params) -> Awaitable:
         ''' Updates a given instance's document.
         raises ModelException if the associated instance's _id
         doesn't exist
@@ -101,7 +101,7 @@ class BaseModel:
         return cls(**params)
 
     @classmethod
-    async def update_one(cls, criteria={}, **params):
+    async def update_one(cls, criteria={}, **params) -> bool:
         ''' Updates a row that matches the criteria parameter, with
         the corresponding params
         Parameters
@@ -124,7 +124,7 @@ class BaseModel:
         return True
 
     @classmethod
-    async def update_many(cls, criteria={}, **params):
+    async def update_many(cls, criteria={}, **params) -> bool:
         ''' Updates all rows that matches the criteria parameter, with
         the corresponding params
         Parameters
@@ -146,7 +146,7 @@ class BaseModel:
         return True
 
     @classmethod
-    def read_all(cls, length=10, **criteria):
+    def read_all(cls, length=10, **criteria) -> AsyncGenerator:
         ''' Read all rows that matches the criteria parameter
         Parameters
         ___________
@@ -215,6 +215,19 @@ class BaseModel:
         '''Used to filter unique fields at __init__'''
         return {k[0]: params[k[0]] for k in cls.fields if k[1]}
 
+    @classmethod
+    def _check_uniqueness(cls, **field_vals):
+        '''Checks uniquness of fields'''
+        if not cls.collection:
+            raise ModelException('Collection\'s name can\'t be blank')
+        primary_id = ObjectId()
+        for field, val in field_vals.items():
+            proxy_collection = '_'.join([field, cls.collection, 'proxy'])
+            doc = {'_id': primary_id, field: val}
+            # It would fail on the proxy table
+            cls.db[proxy_collection].insert_one(doc)
+        return primary_id
+
     async def _get_existing(self, cls):
         ''' Retrieves a existing document'''
         return await cls.read_one(**{'_id': self._id})
@@ -229,25 +242,10 @@ class BaseModel:
                                  of 2 elements each')
         for tup in self.fields:
             if not (type(tup[0]) == str and type(tup[1]) ==  bool):
-                raise ModelException('''Each `field` element in
-                                     `fields` should contain
-                                     first the name of the field in the document
-                                     and second a boolean value indicating if
-                                     the fields is unique or not''')
+                raise ModelException('Each `field` element in \
+                                     `fields` should contain \
+                                     first the name of the field in the document \
+                                     and second a boolean value indicating if \
+                                     the fields is unique or not')
             self.__dict__[tup[0]] = None
-
-    @classmethod
-    def _check_uniqueness(cls, **field_vals):
-        '''Checks uniquness of fields'''
-        if not cls.collection:
-            raise ModelException('Collection\'s name can\'t be blank')
-        primary_id = ObjectId()
-        for field, val in field_vals.items():
-            proxy_collection = '_'.join([field, cls.collection, 'proxy'])
-            doc = {'_id': primary_id, field: val}
-            # It would fail on the proxy table
-            cls.db[proxy_collection].insert_one(doc)
-        return primary_id
-
-
 
