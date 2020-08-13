@@ -49,7 +49,7 @@ async def crud():
   await Example.update_many(criteria={'foo': 'Foo2'}, **{'bar': 'OldBar'})
 
   # Read
-  # this returns a async_generator
+  # this returns an async_generator
   Example.read_all()
 
   # Obtaining the raw collection, to work directly with the motor client
