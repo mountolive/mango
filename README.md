@@ -1,6 +1,6 @@
 # Mangobocado: Small model wrapper for motor
 
-Mangobocado is a small wrapper for the [motor](https://github.com/mongodb/motor) to be used on top of [tornado](https://github.com/tornadoweb/tornado).
+Mangobocado is a small wrapper for the [motor](https://github.com/mongodb/motor) client to be used on top of [tornado](https://github.com/tornadoweb/tornado) or [asyncio](https://docs.python.org/3/library/asyncio.html).
 
 The idea is trying to imitate the Ruby On Rails' ActiveRecord api for handling common operations
 
