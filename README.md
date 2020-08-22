@@ -16,7 +16,7 @@ To install requirements manually: `pip install -r requirements.txt`
 
 `python3 setup.py install`
 
-## Example
+## Example 1
 
 ```
 from mangobocado.base_model import BaseModel
@@ -57,4 +57,25 @@ async def crud():
 
 if __name__ == '__main__':
     IOLoop.instance().run_sync(crud)
+```
+Using [asyncio](https://docs.python.org/3/library/asyncio.html) 
+
+```
+import asyncio
+from mangobocado.base_model import BaseModel
+
+
+class Example2(BaseModel):
+    collection = "example"
+    fields = [("foo", False), ("bar", True)]
+
+
+# Silly example using Asyncio
+
+
+example = Example2()
+example.foo = "foo"
+asyncio.gather(
+    example.save(), example.update(foo="foo2"),
+)
 ```
