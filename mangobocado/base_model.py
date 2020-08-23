@@ -37,17 +37,17 @@ class BaseModel:
         `fields`"""
         if not self.collection or not self.fields:
             raise ModelException(
-                "You need define the `fields` parameter \
-                                 and the name of the collection, as the \
-                                 parameter `collection`"
+                "You need define the `fields` parameter "
+                "and the name of the collection, as the "
+                "parameter `collection`"
             )
         self._valid_fields()
         field_names = list(map(lambda x: x[0], self.fields))
         for k, v in kwargs.items():
             if not (k in field_names or k == "_id"):
                 raise ModelException(
-                    "Passed parameter %s is not part \
-                                     of the model's fields"
+                    "Passed parameter %s is not part "
+                    "of the model's fields"
                     % k
                 )
             setattr(self, k, v)
@@ -60,9 +60,9 @@ class BaseModel:
         the instance's values.
         Else it creates that given instance's document and returns it"""
         cls = type(self)
-        existing = await self._get_existing(cls)
-        if existing:
-            return await cls.update_one(criteria={"_id": self._id}, **self.__dict__)
+        if self._id:
+            await cls.update_one(criteria={"_id": self._id}, **self.__dict__)
+            return True
         res = await cls.create(**self.__dict__)
         self._id = res._id
         return True
@@ -77,8 +77,7 @@ class BaseModel:
         existing = await self._get_existing(cls)
         if not existing:
             raise ModelException(
-                "Document with given \
-                                              id not found"
+                "Document with given id not found"
             )
         return await cls.update_one(criteria={"_id": self._id}, **self.__dict__)
 
@@ -243,16 +242,14 @@ class BaseModel:
         flt = list(filter(lambda x: isinstance(x, tuple) and len(x) == 2, self.fields))
         if not len(flt) == len(self.fields):
             raise ModelException(
-                "`fields` most contain tuples \
-                                 of 2 elements each"
+                "`fields` most contain tuples of 2 elements each"
             )
         for tup in self.fields:
             if not (type(tup[0]) == str and type(tup[1]) == bool):
                 raise ModelException(
-                    "Each `field` element in \
-                                     `fields` should contain \
-                                     first the name of the field in the document \
-                                     and second a boolean value indicating if \
-                                     the fields is unique or not"
+                    "Each `field` element in `fields` should contain "
+                    "first the name of the field in the document "
+                    "and second a boolean value indicating if "
+                    "the fields is unique or not"
                 )
             self.__dict__[tup[0]] = None

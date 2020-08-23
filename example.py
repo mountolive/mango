@@ -1,4 +1,3 @@
-import asyncio
 from mangobocado.base_model import BaseModel
 from tornado.ioloop import IOLoop
 
@@ -6,9 +5,6 @@ from tornado.ioloop import IOLoop
 class Example(BaseModel):
     collection = "example"
     fields = [("foo", False), ("bar", True)]
-
-
-# Tornado
 
 
 async def crud():

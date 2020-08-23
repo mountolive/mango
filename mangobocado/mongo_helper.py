@@ -16,9 +16,9 @@ def db_connected(Class):
                 db.command("ismaster")
             except ConnectionFailure:
                 raise ModelException(
-                    "There's no connection to the db \
-                                     passed as argument. Please, check \
-                                     configuration file: config.yml"
+                    "There's no connection to the db "
+                    "passed as argument. Please, check "
+                    "configuration file: config.yml"
                 )
             else:
                 setattr(Class, "db", db)
@@ -46,5 +46,4 @@ def _create_database(config_file_path: str, db_name: str):
 
 class ModelException(Exception):
     """Custom exception name"""
-
     pass

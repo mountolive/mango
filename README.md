@@ -1,6 +1,6 @@
 # Mangobocado: Small model wrapper for motor
 
-Mangobocado is a small wrapper for the [motor](https://github.com/mongodb/motor) client to be used on top of [tornado](https://github.com/tornadoweb/tornado) or [asyncio](https://docs.python.org/3/library/asyncio.html).
+Mangobocado is a small wrapper for the [motor](https://github.com/mongodb/motor) client to be used on top of [tornado](https://github.com/tornadoweb/tornado).
 
 The idea is trying to imitate the Ruby On Rails' ActiveRecord api for handling common operations
 
@@ -58,24 +58,4 @@ async def crud():
 if __name__ == '__main__':
     IOLoop.instance().run_sync(crud)
 ```
-Using [asyncio](https://docs.python.org/3/library/asyncio.html) 
 
-```
-import asyncio
-from mangobocado.base_model import BaseModel
-
-
-class Example2(BaseModel):
-    collection = "example"
-    fields = [("foo", False), ("bar", True)]
-
-
-# Silly example using Asyncio
-
-
-example = Example2()
-example.foo = "foo"
-asyncio.gather(
-    example.save(), example.update(foo="foo2"),
-)
-```
